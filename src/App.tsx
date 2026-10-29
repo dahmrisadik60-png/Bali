@@ -201,125 +201,170 @@ export default function App() {
   };
 
   if (isAdmin) {
+    const totalRevenue = orders.reduce((acc, curr) => acc + curr.total, 0);
+
     return (
-      <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans" dir="rtl">
+      <div className="min-h-screen bg-[#FDF2F5] p-4 md:p-8 font-sans" dir="rtl">
         <div className="max-w-6xl mx-auto">
-          <header className="flex justify-between items-center mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900">لوحة التحكم</h1>
-              <p className="text-slate-500 text-sm">ROZAKITCHENDZ - إدارة الطلبات</p>
-              <div className="flex gap-4 mt-2">
-                <button 
-                  onClick={() => setEditMode(!editMode)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-medium ${editMode ? 'bg-pink-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-                >
-                  <Edit3 size={18} />
-                  تعديل الصفحة / Modifier
-                </button>
-                <button 
-                  onClick={() => {
-                    if (confirm('سيتم مسح جميع البيانات والإعدادات والعودة للوضع الافتراضي. هل أنت متأكد؟')) {
-                      localStorage.clear();
-                      window.location.reload();
-                    }
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
-                >
-                  <Trash2 size={18} />
-                  إعادة ضبط / Reset
-                </button>
+          {/* Admin Header */}
+          <header className="bg-white p-6 rounded-3xl shadow-sm border border-pink-100 flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-pink-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-pink-200">
+                <ShieldCheck size={28} />
+              </div>
+              <div>
+                <h1 className="text-2xl font-black text-slate-900 leading-none">لوحة الإدارة</h1>
+                <p className="text-slate-400 text-xs mt-1 font-bold">ROZAKITCHENDZ Dashboard</p>
               </div>
             </div>
-            <button 
-              onClick={() => setIsAdmin(false)}
-              className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition-colors text-sm font-medium"
-            >
-              <LogOut size={18} />
-              خروج
-            </button>
+            
+            <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-100">
+              <button 
+                onClick={() => setEditMode(false)}
+                className={`px-6 py-2.5 rounded-xl text-sm font-black transition-all ${!editMode ? 'bg-white text-pink-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                الطلبات / Commandes
+              </button>
+              <button 
+                onClick={() => setEditMode(true)}
+                className={`px-6 py-2.5 rounded-xl text-sm font-black transition-all ${editMode ? 'bg-white text-pink-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                تعديل المنتج / Produit
+              </button>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => {
+                  if (confirm('سيتم مسح جميع البيانات والعودة للوضع الافتراضي. هل أنت متأكد؟')) {
+                    localStorage.clear();
+                    window.location.reload();
+                  }
+                }}
+                className="p-3 bg-red-50 text-red-500 rounded-2xl hover:bg-red-100 transition-colors"
+                title="إعادة ضبط"
+              >
+                <Trash2 size={20} />
+              </button>
+              <button 
+                onClick={() => setIsAdmin(false)}
+                className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl hover:bg-slate-800 transition-all font-bold text-sm shadow-xl shadow-slate-200"
+              >
+                <LogOut size={18} />
+                خروج
+              </button>
+            </div>
           </header>
 
+          {!editMode && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-white p-6 rounded-3xl border border-pink-100 shadow-sm">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="w-10 h-10 bg-pink-50 text-pink-500 rounded-xl flex items-center justify-center">
+                    <Package size={22} />
+                  </div>
+                  <span className="text-[10px] font-black text-pink-500 bg-pink-50 px-2 py-0.5 rounded-full uppercase">Total Orders</span>
+                </div>
+                <h3 className="text-3xl font-black text-slate-900 tabular-nums">{orders.length}</h3>
+                <p className="text-slate-400 text-xs font-bold mt-1">إجمالي الطلبات المستلمة</p>
+              </div>
+              <div className="bg-white p-6 rounded-3xl border border-pink-100 shadow-sm">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="w-10 h-10 bg-emerald-50 text-emerald-500 rounded-xl flex items-center justify-center">
+                    <ShoppingCart size={22} />
+                  </div>
+                  <span className="text-[10px] font-black text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full uppercase">Revenue</span>
+                </div>
+                <h3 className="text-3xl font-black text-slate-900 tabular-nums">{totalRevenue.toLocaleString()} <span className="text-sm font-bold text-slate-400">د.ج</span></h3>
+                <p className="text-slate-400 text-xs font-bold mt-1">إجمالي المبيعات (تقديري)</p>
+              </div>
+              <div className="bg-white p-6 rounded-3xl border border-pink-100 shadow-sm">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center">
+                    <Clock size={22} />
+                  </div>
+                  <span className="text-[10px] font-black text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full uppercase">Last Order</span>
+                </div>
+                <h3 className="text-xl font-black text-slate-900">{orders.length > 0 ? orders[0].date.split(',')[0] : '---'}</h3>
+                <p className="text-slate-400 text-xs font-bold mt-1">تاريخ آخر طلب مستلم</p>
+              </div>
+            </div>
+          )}
+
           {editMode ? (
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 space-y-8 mb-10">
-              <h2 className="text-xl font-bold border-b pb-4">تعديل بيانات المنتج</h2>
+            <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-pink-100 space-y-10">
+              <div>
+                <h2 className="text-2xl font-black text-slate-900 mb-2">تعديل بيانات المنتج</h2>
+                <p className="text-slate-400 text-sm font-bold">تحكم في محتوى صفحة الهبوط والأسعار</p>
+              </div>
               
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <label className="block text-sm font-bold">اسم المنتج</label>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <label className="text-sm font-black text-slate-700">إسم المنتج الكامل / Nom du produit</label>
                   <input 
                     type="text" 
                     value={editData.name}
                     onChange={e => setEditData({...editData, name: e.target.value})}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200"
+                    className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:ring-4 focus:ring-pink-50 outline-none transition-all font-bold text-slate-700"
                   />
                 </div>
-                <div className="space-y-4">
-                  <label className="block text-sm font-bold">نسبة التخفيض (مثلاً: -3%)</label>
+                <div className="space-y-3">
+                  <label className="text-sm font-black text-slate-700">نسبة التخفيض / Remise (Ex: -10%)</label>
                   <input 
                     type="text" 
                     value={editData.discount}
                     onChange={e => setEditData({...editData, discount: e.target.value})}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200"
+                    className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:ring-4 focus:ring-pink-50 outline-none transition-all font-bold text-slate-700"
                   />
                 </div>
-                <div className="space-y-4">
-                  <label className="block text-sm font-bold">السعر الأصلي</label>
+                <div className="space-y-3">
+                  <label className="text-sm font-black text-slate-700">السعر الأصلي / Prix Original (د.ج)</label>
                   <input 
                     type="number" 
                     value={editData.originalPrice}
                     onChange={e => setEditData({...editData, originalPrice: Number(e.target.value)})}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 font-mono"
+                    className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:ring-4 focus:ring-pink-50 outline-none transition-all font-mono font-bold"
                   />
                 </div>
-                <div className="space-y-4">
-                  <label className="block text-sm font-bold">السعر الحالي</label>
+                <div className="space-y-3">
+                  <label className="text-sm font-black text-slate-700">السعر الحالي / Prix de vente (د.ج)</label>
                   <input 
                     type="number" 
                     value={editData.currentPrice}
                     onChange={e => setEditData({...editData, currentPrice: Number(e.target.value)})}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 font-mono"
+                    className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:ring-4 focus:ring-pink-50 outline-none transition-all font-mono font-bold text-pink-600"
                   />
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="flex justify-between items-center mb-4">
-                  <label className="block text-sm font-bold">ألبوم الصور</label>
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <label className="text-sm font-black text-slate-700 uppercase tracking-widest">ألبوم الصور / Galerie Photos</label>
                   <button 
                     onClick={() => setEditData({...editData, images: []})}
-                    className="text-xs text-red-500 font-bold hover:underline"
+                    className="text-xs text-red-500 font-black hover:underline px-3 py-1 bg-red-50 rounded-lg transition-all"
                   >
-                    مسح جميع الصور
+                    إفراغ الألبوم / Clear
                   </button>
                 </div>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 border-2 border-dashed border-slate-200 p-4 rounded-2xl bg-slate-50">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4 border-2 border-dashed border-pink-100 p-6 rounded-[2rem] bg-slate-50/50">
                   {editData.images.map((img, i) => (
-                    <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-slate-200 bg-white shadow-sm flex items-center justify-center p-1">
+                    <div key={i} className="relative aspect-square rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm flex items-center justify-center p-1 group">
                       <img src={img} className="max-w-full max-h-full object-contain" />
                       <button 
                         onClick={() => removeImage(i)}
-                        className="absolute top-1 right-1 w-7 h-7 bg-red-600/90 text-white rounded-full flex items-center justify-center shadow-md active:scale-90 transition-all z-10"
-                        title="حذف الصورة"
+                        className="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-[2px]"
                       >
-                        <X size={16} />
+                        <Trash2 size={20} />
                       </button>
                     </div>
                   ))}
-                  <label className="aspect-square rounded-xl border-2 border-dashed border-slate-300 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-white hover:border-blue-400 transition-all text-slate-400 hover:text-pink-500">
+                  <label className="aspect-square rounded-2xl border-2 border-dashed border-pink-200 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-white hover:border-pink-400 transition-all text-pink-300 hover:text-pink-500">
                     <ImageIcon size={24} />
-                    <span className="text-[10px] font-bold">رفع صورة</span>
-                    <input 
-                      type="file" 
-                      multiple 
-                      accept="image/*" 
-                      onChange={handleFileUpload} 
-                      className="hidden" 
-                    />
+                    <span className="text-[10px] font-black uppercase">Upload</span>
+                    <input type="file" multiple accept="image/*" onChange={handleFileUpload} className="hidden" />
                   </label>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-2">
-                  * ملاحظة: يفضل استخدام روابط خارجية للصور إذا كان العدد كبيراً لتجنب بطء الصفحة.
-                </p>
                 <textarea 
                   rows={2}
                   value={editData.images.filter(img => img.startsWith('http')).join('\n')}
@@ -328,79 +373,91 @@ export default function App() {
                     const externalImages = e.target.value.split('\n').filter(s => s.trim());
                     setEditData({...editData, images: [...localImages, ...externalImages]});
                   }}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 font-mono text-xs mt-4"
-                  placeholder="أو أضف روابط خارجية هنا (رابط واحد في كل سطر)"
+                  className="w-full px-5 py-4 rounded-2xl border border-slate-200 font-mono text-xs focus:ring-4 focus:ring-pink-50 outline-none"
+                  placeholder="أو أضف روابط خارجية هنا (رابط واحد في كل سطر)..."
                 />
               </div>
 
               <div className="space-y-4">
-                <label className="block text-sm font-bold">المميزات (ميزة واحدة في كل سطر)</label>
+                <label className="text-sm font-black text-slate-700 uppercase tracking-widest">المميزات / Caractéristiques (سطر لكل ميزة)</label>
                 <textarea 
                   rows={4}
                   value={editData.features.join('\n')}
                   onChange={e => setEditData({...editData, features: e.target.value.split('\n').filter(s => s.trim())})}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm"
+                  className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:ring-4 focus:ring-pink-50 outline-none font-bold text-sm text-slate-600"
                 />
               </div>
 
-              <div className="flex justify-end gap-4">
-                <button 
-                  onClick={() => setEditMode(false)}
-                  className="px-8 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold"
-                >
-                  إلغاء
-                </button>
+              <div className="flex justify-center pt-4">
                 <button 
                   onClick={handleSaveProduct}
-                  className="px-8 py-3 bg-pink-600 text-white rounded-xl font-bold flex items-center gap-2"
+                  className="px-12 py-5 bg-pink-500 text-white rounded-3xl font-black text-xl flex items-center gap-3 shadow-2xl shadow-pink-200 hover:bg-pink-600 hover:-translate-y-1 transition-all active:scale-95"
                 >
-                  <Save size={20} />
-                  حفظ البيانات
+                  <Save size={24} />
+                  حفظ جميع التغييرات / Enregistrer
                 </button>
               </div>
             </div>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-              <div className="p-6 border-b flex justify-between items-center">
-                <h2 className="text-xl font-bold">قائمة الطلبات</h2>
-                <div className="bg-pink-50 text-blue-700 px-4 py-1 rounded-full text-xs font-bold">
-                  إجمالي الطلبات: {orders.length}
+            <div className="bg-white rounded-[2.5rem] shadow-sm border border-pink-100 overflow-hidden">
+              <div className="p-8 border-b border-pink-50 flex justify-between items-center bg-slate-50/50">
+                <div>
+                  <h2 className="text-xl font-black text-slate-900">سجل الطلبات الأخير</h2>
+                  <p className="text-slate-400 text-xs font-bold mt-1">تتم إدارة الطلبات يدوياً من هنا</p>
                 </div>
+                <button 
+                  onClick={() => {
+                    if (confirm('هل أنت متأكد من مسح جميع الطلبات؟')) {
+                      setOrders([]);
+                      localStorage.removeItem('roza_beauty_orders');
+                    }
+                  }}
+                  className="px-5 py-2.5 bg-red-50 text-red-500 rounded-xl text-xs font-black hover:bg-red-100 transition-all"
+                >
+                  مسح السجل / Clear All
+                </button>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-right border-collapse">
                   <thead>
-                    <tr className="bg-slate-50 border-b border-slate-200">
-                      <th className="px-6 py-4 text-sm font-semibold text-slate-600">التاريخ</th>
-                      <th className="px-6 py-4 text-sm font-semibold text-slate-600">الاسم واللقب</th>
-                      <th className="px-6 py-4 text-sm font-semibold text-slate-600">الهاتف</th>
-                      <th className="px-6 py-4 text-sm font-semibold text-slate-600">الولاية / البلدية</th>
-                      <th className="px-6 py-4 text-sm font-semibold text-slate-600">الكمية</th>
-                      <th className="px-6 py-4 text-sm font-semibold text-slate-600">المجموع</th>
-                      <th className="px-6 py-4 text-sm font-semibold text-slate-600">الإجراءات</th>
+                    <tr className="bg-slate-50/80 border-b border-pink-50">
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">التاريخ / Date</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">الزبون / Client</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">الهاتف / Tel</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">العنوان / Adresse</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">الكمية / Qty</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">المجموع / Total</th>
+                      <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">حذف</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-pink-50/50">
                     {orders.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="px-6 py-12 text-center text-slate-400">لا توجد طلبات حالياً</td>
+                        <td colSpan={7} className="px-8 py-24 text-center">
+                          <div className="flex flex-col items-center gap-4">
+                            <div className="w-16 h-16 bg-slate-50 text-slate-200 rounded-full flex items-center justify-center">
+                              <Package size={32} />
+                            </div>
+                            <p className="text-slate-400 font-bold">لا توجد طلبات جديدة حالياً</p>
+                          </div>
+                        </td>
                       </tr>
                     ) : (
                       orders.map(order => (
-                        <tr key={order.id} className="hover:bg-slate-50 transition-colors">
-                          <td className="px-6 py-4 text-xs text-slate-500 font-mono">{order.date}</td>
-                          <td className="px-6 py-4 text-sm font-bold text-slate-900">{order.name}</td>
-                          <td className="px-6 py-4 text-sm text-slate-700 font-mono">{order.phone}</td>
-                          <td className="px-6 py-4 text-sm text-slate-700">
-                            {order.wilaya} <br/>
-                            <span className="text-xs text-slate-400">{order.commune}</span>
+                        <tr key={order.id} className="hover:bg-pink-50/30 transition-colors group">
+                          <td className="px-8 py-5 text-xs text-slate-400 font-mono">{order.date}</td>
+                          <td className="px-8 py-5 text-sm font-black text-slate-900">{order.name}</td>
+                          <td className="px-8 py-5 text-sm text-slate-700 font-mono tracking-tighter" dir="ltr">{order.phone}</td>
+                          <td className="px-8 py-5 text-xs text-slate-700">
+                            <div className="font-black text-pink-600">{order.wilaya}</div>
+                            <div className="text-slate-400 font-bold">{order.commune}</div>
                           </td>
-                          <td className="px-6 py-4 text-sm text-slate-700">{order.quantity}</td>
-                          <td className="px-6 py-4 text-sm font-bold text-pink-600">{order.total.toLocaleString()} د.ج</td>
-                          <td className="px-6 py-4 text-sm">
+                          <td className="px-8 py-5 text-sm font-black text-slate-900 text-center bg-slate-50/30">x{order.quantity}</td>
+                          <td className="px-8 py-5 text-sm font-black text-pink-600 tabular-nums">{order.total.toLocaleString()} د.ج</td>
+                          <td className="px-8 py-5">
                             <button 
                               onClick={() => deleteOrder(order.id)}
-                              className="p-2 text-red-400 hover:text-red-600 transition-colors"
+                              className="w-10 h-10 rounded-xl text-red-300 hover:text-red-500 hover:bg-red-50 transition-all flex items-center justify-center"
                             >
                               <Trash2 size={18} />
                             </button>
