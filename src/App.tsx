@@ -106,6 +106,16 @@ export default function App() {
         setProductData(parsed);
         setEditData(parsed);
     }
+
+    // Global error listener for images to handle broken paths
+    const handleError = (e: ErrorEvent) => {
+      if (e.target instanceof HTMLImageElement) {
+        console.error("فشل تحميل الصورة:", e.target.src);
+        e.target.src = "https://placehold.co/600x400?text=Image+Not+Found";
+      }
+    };
+    window.addEventListener('error', handleError, true);
+    return () => window.removeEventListener('error', handleError, true);
   }, []);
 
   const handleAdminLogin = (e: React.FormEvent) => {
@@ -201,7 +211,7 @@ export default function App() {
               <div className="flex gap-4 mt-2">
                 <button 
                   onClick={() => setEditMode(!editMode)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-medium ${editMode ? 'bg-orange-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-medium ${editMode ? 'bg-pink-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 >
                   <Edit3 size={18} />
                   تعديل الصفحة
@@ -283,7 +293,7 @@ export default function App() {
                       </button>
                     </div>
                   ))}
-                  <label className="aspect-square rounded-xl border-2 border-dashed border-slate-300 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-white hover:border-blue-400 transition-all text-slate-400 hover:text-blue-500">
+                  <label className="aspect-square rounded-xl border-2 border-dashed border-slate-300 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-white hover:border-blue-400 transition-all text-slate-400 hover:text-pink-500">
                     <ImageIcon size={24} />
                     <span className="text-[10px] font-bold">رفع صورة</span>
                     <input 
@@ -330,7 +340,7 @@ export default function App() {
                 </button>
                 <button 
                   onClick={handleSaveProduct}
-                  className="px-8 py-3 bg-blue-600 text-white rounded-xl font-bold flex items-center gap-2"
+                  className="px-8 py-3 bg-pink-600 text-white rounded-xl font-bold flex items-center gap-2"
                 >
                   <Save size={20} />
                   حفظ البيانات
@@ -341,7 +351,7 @@ export default function App() {
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
               <div className="p-6 border-b flex justify-between items-center">
                 <h2 className="text-xl font-bold">قائمة الطلبات</h2>
-                <div className="bg-blue-50 text-blue-700 px-4 py-1 rounded-full text-xs font-bold">
+                <div className="bg-pink-50 text-blue-700 px-4 py-1 rounded-full text-xs font-bold">
                   إجمالي الطلبات: {orders.length}
                 </div>
               </div>
@@ -374,7 +384,7 @@ export default function App() {
                             <span className="text-xs text-slate-400">{order.commune}</span>
                           </td>
                           <td className="px-6 py-4 text-sm text-slate-700">{order.quantity}</td>
-                          <td className="px-6 py-4 text-sm font-bold text-blue-600">{order.total.toLocaleString()} د.ج</td>
+                          <td className="px-6 py-4 text-sm font-bold text-pink-600">{order.total.toLocaleString()} د.ج</td>
                           <td className="px-6 py-4 text-sm">
                             <button 
                               onClick={() => deleteOrder(order.id)}
@@ -397,7 +407,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFDFD] text-slate-900 font-sans selection:bg-orange-100" dir="rtl">
+    <div className="min-h-screen bg-[#FDFDFD] text-slate-900 font-sans selection:bg-pink-100" dir="rtl">
       {/* Admin Login Modal */}
       <AnimatePresence>
         {showAdminLogin && (
@@ -406,7 +416,7 @@ export default function App() {
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative bg-white p-8 rounded-3xl shadow-2xl w-full max-w-sm">
               <h3 className="text-xl font-bold mb-4 text-center">الدخول للمسؤول</h3>
               <form onSubmit={handleAdminLogin} className="space-y-4">
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="كلمة المرور" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all" autoFocus />
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="كلمة المرور" className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-pink-500 outline-none transition-all" autoFocus />
                 <button type="submit" className="w-full py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-95">دخول</button>
               </form>
             </motion.div>
@@ -414,12 +424,11 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Top Banner Ticker */}
       <div className="bg-slate-900 text-white py-2 px-4 overflow-hidden whitespace-nowrap">
         <div className="flex justify-center items-center gap-8 text-[10px] md:text-xs font-bold tracking-wider">
-          <span className="flex items-center gap-2"><CheckCircle size={14} className="text-emerald-400" /> منتج أصلي 100%</span>
+          <span className="flex items-center gap-2"><CheckCircle size={14} className="text-emerald-400" /> منتج أصلي 100% / Produit 100% Original</span>
           <span className="text-slate-600">▪</span>
-          <span className="flex items-center gap-2"><Truck size={14} className="text-orange-400" /> توصيل لـ 69 ولاية</span>
+          <span className="flex items-center gap-2"><Truck size={14} className="text-pink-400" /> توصيل لـ 69 ولاية / Livraison 69 Wilayas</span>
         </div>
       </div>
 
@@ -431,10 +440,10 @@ export default function App() {
             className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-200 transition-all"
           >
             <ShieldCheck size={16} />
-            لوحة التحكم
+            لوحة التحكم / Admin
           </button>
           <div className="text-xl md:text-2xl font-black tracking-tighter text-slate-900 uppercase">
-            <span className="text-orange-500">ROZAKITCHENDZ</span> DZ
+            <span className="text-pink-500">ROZAKITCHENDZ</span> DZ
           </div>
         </div>
       </header>
@@ -475,10 +484,10 @@ export default function App() {
                 
                 {/* Badges */}
                 <div className="absolute top-4 right-4 z-10 bg-red-500 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg">
-                    تخفيض {productData.discount}
+                    تخفيض / Promo {productData.discount}
                 </div>
                 <div className="absolute bottom-4 left-4 z-10 bg-slate-900/80 backdrop-blur text-white text-[10px] font-bold px-4 py-1 rounded-full border border-white/20">
-                    الدفعة الأخيرة متوفرة
+                    الدفعة الأخيرة متوفرة / Dernier stock disponible
                 </div>
 
                 {/* Arrows (Hidden on small mobile, visible on hover) */}
@@ -498,7 +507,7 @@ export default function App() {
                 {/* Dots indicator */}
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
                     {productData.images.map((_, i) => (
-                        <div key={i} className={`h-1.5 rounded-full transition-all ${activeImgIndex === i ? 'w-6 bg-orange-500' : 'w-1.5 bg-white/50'}`} />
+                        <div key={i} className={`h-1.5 rounded-full transition-all ${activeImgIndex === i ? 'w-6 bg-pink-500' : 'w-1.5 bg-white/50'}`} />
                     ))}
                 </div>
             </div>
@@ -510,7 +519,7 @@ export default function App() {
                         key={i} 
                         id={`thumb-${i}`}
                         onClick={() => setActiveImgIndex(i)}
-                        className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all shrink-0 shadow-sm bg-white flex items-center justify-center p-1 ${activeImgIndex === i ? 'border-orange-500 scale-105 shadow-orange-100' : 'border-transparent opacity-60'}`}
+                        className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all shrink-0 shadow-sm bg-white flex items-center justify-center p-1 ${activeImgIndex === i ? 'border-pink-500 scale-105 shadow-pink-100' : 'border-transparent opacity-60'}`}
                     >
                         <img src={img} className="max-w-full max-h-full object-contain" />
                     </button>
@@ -525,16 +534,16 @@ export default function App() {
               
               <div className="flex items-center justify-center gap-4">
                 <div className="flex flex-col items-end">
-                  <span className="text-slate-400 line-through text-sm">{productData.originalPrice.toLocaleString()} د.ج</span>
+                  <span className="text-slate-400 line-through text-sm">{productData.originalPrice.toLocaleString()} د.ج / DA</span>
                   <div className="flex items-baseline gap-1 text-3xl font-black text-emerald-600">
                     <span>{productData.currentPrice.toLocaleString()}</span>
-                    <span className="text-sm">د.ج</span>
+                    <span className="text-sm">د.ج / DA</span>
                   </div>
                 </div>
               </div>
 
-              <div className="inline-block bg-emerald-50 text-emerald-700 px-4 py-1.5 rounded-full text-xs font-bold border border-emerald-100">
-                الدفع عند الاستلام
+              <div className="inline-block bg-emerald-50 text-emerald-700 px-4 py-1.5 rounded-full text-xs font-bold border border-emerald-100 uppercase tracking-tighter">
+                الدفع عند الاستلام / Paiement à la livraison
               </div>
             </div>
           </div>
@@ -544,8 +553,8 @@ export default function App() {
         <section className="px-4 py-10">
           <div className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-xl shadow-slate-100">
             <h2 className="text-xl font-black mb-6 flex items-center gap-3">
-              <Star className="text-orange-500 fill-orange-500" size={24} />
-              مميزات الجهاز الرئيسية:
+              <Star className="text-pink-500 fill-pink-500" size={24} />
+              مميزات الجهاز الرئيسية / Caractéristiques principales:
             </h2>
             <ul className="space-y-4">
               {productData.features.map((feature, i) => (
@@ -562,69 +571,69 @@ export default function App() {
 
         {/* Order Form Container */}
         <section id="order-form" className="px-4 py-4">
-          <div className="bg-[#FFC107]/5 border-2 border-[#FFC107] rounded-[3rem] p-6 md:p-10">
+          <div className="bg-[#EC4899]/5 border-2 border-[#EC4899] rounded-[3rem] p-6 md:p-10">
             <div className="text-center mb-10">
-              <div className="inline-block bg-[#FFC107] text-white px-6 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4">للطلب يرجى ملئ الاستمارة</div>
-              <h2 className="text-2xl md:text-3xl font-black text-slate-900">أدخل معلوماتك لإتمام الطلب</h2>
-              <p className="text-slate-500 text-sm mt-2">التوصيل متوفر لجميع الولايات - الدفع بعد المعاينة والاستلام</p>
+              <div className="inline-block bg-[#EC4899] text-white px-6 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mb-4">للطلب يرجى ملئ الاستمارة / Remplir le formulaire</div>
+              <h2 className="text-2xl md:text-3xl font-black text-slate-900 leading-tight">أدخل معلوماتك لإتمام الطلب / Vos informations</h2>
+              <p className="text-slate-500 text-xs mt-2">التوصيل متوفر لجميع الولايات - الدفع بعد المعاينة والاستلام / Paiement à la livraison</p>
             </div>
 
             <form onSubmit={handleSubmitOrder} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700 flex items-center gap-2">الاسم واللقب <span className="text-red-500">*</span></label>
+                <label className="text-sm font-bold text-slate-700 flex items-center gap-2 uppercase tracking-tighter">الاسم واللقب / Nom et Prénom <span className="text-red-500">*</span></label>
                 <input 
                   type="text" 
                   required
                   value={formData.name}
                   onChange={e => setFormData({...formData, name: e.target.value})}
-                  placeholder="مثال: محمد بن علي"
-                  className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-orange-100 outline-none transition-all placeholder:text-slate-300 text-lg"
+                  placeholder="Ex: Mohamed Ali"
+                  className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-pink-100 outline-none transition-all placeholder:text-slate-300 text-lg"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700 flex items-center gap-2">رقم الهاتف <span className="text-red-500">*</span></label>
+                <label className="text-sm font-bold text-slate-700 flex items-center gap-2 uppercase tracking-tighter">رقم الهاتف / Numéro de téléphone <span className="text-red-500">*</span></label>
                 <input 
                   type="tel" 
                   required
                   value={formData.phone}
                   onChange={e => setFormData({...formData, phone: e.target.value})}
-                  placeholder="مثال: 0661234567"
-                  className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-orange-100 outline-none transition-all placeholder:text-slate-300 text-lg font-mono text-left"
+                  placeholder="06XXXXXXXX"
+                  className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-pink-100 outline-none transition-all placeholder:text-slate-300 text-lg font-mono text-left"
                   dir="ltr"
                 />
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700">الولاية (69 ولاية) <span className="text-red-500">*</span></label>
+                  <label className="text-sm font-bold text-slate-700 uppercase tracking-tighter">الولاية / Wilaya (69) <span className="text-red-500">*</span></label>
                   <select 
                     required
                     value={formData.wilaya}
                     onChange={e => setFormData({...formData, wilaya: e.target.value})}
-                    className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-orange-100 outline-none transition-all appearance-none cursor-pointer"
+                    className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-pink-100 outline-none transition-all appearance-none cursor-pointer"
                   >
-                    <option value="" disabled>-- اختر الولاية --</option>
+                    <option value="" disabled>-- Choisir Wilaya --</option>
                     {WILAYAS.map(w => <option key={w} value={w}>{w}</option>)}
                   </select>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700">البلدية <span className="text-red-500">*</span></label>
+                  <label className="text-sm font-bold text-slate-700 uppercase tracking-tighter">البلدية / Commune <span className="text-red-500">*</span></label>
                   <input 
                     type="text" 
                     required
                     value={formData.commune}
                     onChange={e => setFormData({...formData, commune: e.target.value})}
-                    placeholder="مثال: العلمة / الشراقة"
-                    className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-orange-100 outline-none transition-all placeholder:text-slate-300 text-lg"
+                    placeholder="Ex: Alger / Oran"
+                    className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-pink-100 outline-none transition-all placeholder:text-slate-300 text-lg"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                    <label className="text-sm font-bold text-slate-700">الكمية:</label>
+                    <label className="text-sm font-bold text-slate-700">الكمية / Quantité:</label>
                     <div className="flex items-center gap-4 bg-white px-4 py-2 rounded-2xl border border-slate-200">
                         <button type="button" onClick={() => setFormData({...formData, quantity: Math.max(1, formData.quantity - 1)})} className="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-900 rounded-xl hover:bg-slate-100 transition-colors font-bold border border-slate-200">-</button>
                         <span className="w-10 text-center font-black text-xl">{formData.quantity}</span>
@@ -634,33 +643,33 @@ export default function App() {
               </div>
 
               {/* Price Calculation Box */}
-              <div className="bg-[#FFF9E6] p-6 rounded-3xl border border-[#FFC107]/20 space-y-4">
+              <div className="bg-[#FFF1F2] p-6 rounded-3xl border border-[#EC4899]/20 space-y-4">
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500 font-bold">سعر المنتج:</span>
-                  <span className="text-slate-900 font-mono">{(formData.quantity * productData.currentPrice).toLocaleString()} د.ج</span>
+                  <span className="text-slate-500 font-bold tracking-tighter">سعر المنتج / Prix:</span>
+                  <span className="text-slate-900 font-mono">{(formData.quantity * productData.currentPrice).toLocaleString()} د.ج / DA</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500 font-bold">التوصيل:</span>
-                  <span className="text-emerald-600 font-bold">حسب الولاية (عند الاتصال)</span>
+                  <span className="text-slate-500 font-bold tracking-tighter">التوصيل / Livraison:</span>
+                  <span className="text-emerald-600 font-bold text-[10px] md:text-xs">حسب الولاية / Selon Wilaya</span>
                 </div>
-                <div className="h-px bg-[#FFC107]/20" />
+                <div className="h-px bg-[#EC4899]/20" />
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-black text-slate-900">المبلغ الإجمالي التقريبي:</span>
-                  <span className="text-2xl font-black text-orange-600">{(formData.quantity * productData.currentPrice).toLocaleString()} د.ج</span>
+                  <span className="text-sm md:text-base font-black text-slate-900 tracking-tighter">المبلغ الإجمالي التقريبي / Total:</span>
+                  <span className="text-xl md:text-2xl font-black text-pink-600">{(formData.quantity * productData.currentPrice).toLocaleString()} د.ج / DA</span>
                 </div>
               </div>
 
               <button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full py-6 bg-orange-500 hover:bg-orange-600 text-white rounded-3xl font-black text-xl shadow-xl shadow-orange-200 transition-all active:scale-[0.98] flex items-center justify-center gap-3"
+                className="w-full py-6 bg-pink-500 hover:bg-pink-600 text-white rounded-3xl font-black text-xl shadow-xl shadow-pink-200 transition-all active:scale-[0.98] flex items-center justify-center gap-3"
               >
                 {isSubmitting ? (
                   <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
                     <CheckCircle size={28} />
-                    تأكيد الطلب الآن (الدفع عند الاستلام)
+                    تأكيد الطلب الآن / Confirmer la commande
                   </>
                 )}
               </button>
@@ -672,8 +681,8 @@ export default function App() {
                   <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-2">
                     <CheckCircle size={32} />
                   </div>
-                  <h4 className="text-xl font-bold">تم إرسال طلبك بنجاح!</h4>
-                  <p className="text-sm opacity-90">سيتواصل معك فريق خدمة العملاء قريباً لتأكيد طلبك.</p>
+                  <h4 className="text-xl font-bold">تم إرسال طلبك بنجاح / Succès!</h4>
+                  <p className="text-sm opacity-90">سيتواصل معك فريق خدمة العملاء قريباً / On vous contactera bientôt.</p>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -683,9 +692,9 @@ export default function App() {
         {/* Footer Trust Section */}
         <section className="px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-                { title: "توصيل سريع", desc: "لجميع الولايات", icon: Truck, bg: "bg-orange-50", text: "text-orange-600" },
-                { title: "ضمان الجودة", desc: "منتج أصلي Ninja", icon: ShieldCheck, bg: "bg-emerald-50", text: "text-emerald-600" },
-                { title: "الدفع بعد الرؤية", desc: "افحص ثم ادفع", icon: Eye, bg: "bg-blue-50", text: "text-blue-600" }
+                { title: "توصيل سريع / Rapide", desc: "69 ولاية / Wilayas", icon: Truck, bg: "bg-pink-50", text: "text-pink-600" },
+                { title: "ضمان الجودة / Qualité", desc: "منتج أصلي / Original", icon: ShieldCheck, bg: "bg-emerald-50", text: "text-emerald-600" },
+                { title: "الدفع بعد الرؤية", desc: "Paiement à la livraison", icon: Eye, bg: "bg-pink-50", text: "text-pink-600" }
             ].map((item, i) => (
                 <div key={i} className="bg-white p-6 rounded-[2rem] border border-slate-100 flex flex-col items-center text-center shadow-sm">
                     <div className={`w-12 h-12 ${item.bg} ${item.text} rounded-2xl flex items-center justify-center mb-4`}>
@@ -702,17 +711,17 @@ export default function App() {
       {/* Sticky Bottom Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-t border-slate-100 px-6 py-4 flex items-center justify-between shadow-2xl safe-area-bottom">
         <div className="flex flex-col items-start">
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">السعر التنافسي:</span>
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">السعر / Prix:</span>
             <div className="flex items-baseline gap-1">
-                <span className="text-2xl font-black text-orange-600">{productData.currentPrice.toLocaleString()}</span>
-                <span className="text-xs font-bold text-orange-400">د.ج</span>
+                <span className="text-2xl font-black text-pink-600">{productData.currentPrice.toLocaleString()}</span>
+                <span className="text-xs font-bold text-pink-400">د.ج / DA</span>
             </div>
         </div>
         <button 
             onClick={scrollToForm}
-            className="bg-orange-500 text-white px-8 py-3.5 rounded-2xl font-black text-base shadow-lg shadow-orange-200 active:scale-95 transition-all flex items-center gap-2"
+            className="bg-pink-500 text-white px-8 py-3.5 rounded-2xl font-black text-base shadow-lg shadow-pink-200 active:scale-95 transition-all flex items-center gap-2"
         >
-            أطلب الآن
+            أطلب / Commander
             <ChevronLeft size={20} />
         </button>
       </div>
