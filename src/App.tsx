@@ -440,7 +440,7 @@ export default function App() {
             className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-200 transition-all"
           >
             <ShieldCheck size={16} />
-            لوحة التحكم / Admin
+            لوحة التحكم / Administration
           </button>
           <div className="text-xl md:text-2xl font-black tracking-tighter text-slate-900 uppercase">
             <span className="text-pink-500">ROZAKITCHENDZ</span> DZ
@@ -484,10 +484,10 @@ export default function App() {
                 
                 {/* Badges */}
                 <div className="absolute top-4 right-4 z-10 bg-red-500 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg">
-                    تخفيض / Promo {productData.discount}
+                    تخفيض حصري / Promo {productData.discount}
                 </div>
                 <div className="absolute bottom-4 left-4 z-10 bg-slate-900/80 backdrop-blur text-white text-[10px] font-bold px-4 py-1 rounded-full border border-white/20">
-                    الدفعة الأخيرة متوفرة / Dernier stock disponible
+                    الدفعة الأخيرة متوفرة / Stock limité
                 </div>
 
                 {/* Arrows (Hidden on small mobile, visible on hover) */}
@@ -542,7 +542,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="inline-block bg-emerald-50 text-emerald-700 px-4 py-1.5 rounded-full text-xs font-bold border border-emerald-100 uppercase tracking-tighter">
+              <div className="inline-block bg-emerald-50 text-emerald-700 px-4 py-1.5 rounded-full text-[10px] font-black border border-emerald-100 uppercase tracking-tighter">
                 الدفع عند الاستلام / Paiement à la livraison
               </div>
             </div>
@@ -554,7 +554,7 @@ export default function App() {
           <div className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-xl shadow-slate-100">
             <h2 className="text-xl font-black mb-6 flex items-center gap-3">
               <Star className="text-pink-500 fill-pink-500" size={24} />
-              مميزات الجهاز الرئيسية / Caractéristiques principales:
+              خصائص المنتج الأساسية / Caractéristiques:
             </h2>
             <ul className="space-y-4">
               {productData.features.map((feature, i) => (
@@ -573,9 +573,9 @@ export default function App() {
         <section id="order-form" className="px-4 py-4">
           <div className="bg-[#EC4899]/5 border-2 border-[#EC4899] rounded-[3rem] p-6 md:p-10">
             <div className="text-center mb-10">
-              <div className="inline-block bg-[#EC4899] text-white px-6 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mb-4">للطلب يرجى ملئ الاستمارة / Remplir le formulaire</div>
-              <h2 className="text-2xl md:text-3xl font-black text-slate-900 leading-tight">أدخل معلوماتك لإتمام الطلب / Vos informations</h2>
-              <p className="text-slate-500 text-xs mt-2">التوصيل متوفر لجميع الولايات - الدفع بعد المعاينة والاستلام / Paiement à la livraison</p>
+              <div className="inline-block bg-[#EC4899] text-white px-6 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mb-4">أطلب الآن / Commander</div>
+              <h2 className="text-2xl md:text-3xl font-black text-slate-900 leading-tight">يرجى ملئ معلوماتك للطلب / Vos coordonnées</h2>
+              <p className="text-slate-500 text-[10px] mt-2">التوصيل متوفر لجميع الولايات - الدفع عند الاستلام / Livraison 58 Wilayas</p>
             </div>
 
             <form onSubmit={handleSubmitOrder} className="space-y-6">
@@ -606,14 +606,14 @@ export default function App() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700 uppercase tracking-tighter">الولاية / Wilaya (69) <span className="text-red-500">*</span></label>
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-tighter">الولاية / Wilaya <span className="text-red-500">*</span></label>
                   <select 
                     required
                     value={formData.wilaya}
                     onChange={e => setFormData({...formData, wilaya: e.target.value})}
                     className="w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-pink-100 outline-none transition-all appearance-none cursor-pointer"
                   >
-                    <option value="" disabled>-- Choisir Wilaya --</option>
+                    <option value="" disabled>-- إختر الولاية / Choisir Wilaya --</option>
                     {WILAYAS.map(w => <option key={w} value={w}>{w}</option>)}
                   </select>
                 </div>
@@ -669,7 +669,7 @@ export default function App() {
                 ) : (
                   <>
                     <CheckCircle size={28} />
-                    تأكيد الطلب الآن / Confirmer la commande
+                    تأكيد الطلب / Confirmer la commande
                   </>
                 )}
               </button>
@@ -721,7 +721,7 @@ export default function App() {
             onClick={scrollToForm}
             className="bg-pink-500 text-white px-8 py-3.5 rounded-2xl font-black text-base shadow-lg shadow-pink-200 active:scale-95 transition-all flex items-center gap-2"
         >
-            أطلب / Commander
+            أطلب الآن / Commander
             <ChevronLeft size={20} />
         </button>
       </div>
