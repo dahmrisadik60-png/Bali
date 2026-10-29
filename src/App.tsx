@@ -214,7 +214,19 @@ export default function App() {
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-medium ${editMode ? 'bg-pink-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 >
                   <Edit3 size={18} />
-                  تعديل الصفحة
+                  تعديل الصفحة / Modifier
+                </button>
+                <button 
+                  onClick={() => {
+                    if (confirm('سيتم مسح جميع البيانات والإعدادات والعودة للوضع الافتراضي. هل أنت متأكد؟')) {
+                      localStorage.clear();
+                      window.location.reload();
+                    }
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
+                >
+                  <Trash2 size={18} />
+                  إعادة ضبط / Reset
                 </button>
               </div>
             </div>
@@ -574,7 +586,7 @@ export default function App() {
           <div className="bg-[#EC4899]/5 border-2 border-[#EC4899] rounded-[3rem] p-6 md:p-10">
             <div className="text-center mb-10">
               <div className="inline-block bg-[#EC4899] text-white px-6 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mb-4">أطلب الآن / Commander</div>
-              <h2 className="text-2xl md:text-3xl font-black text-slate-900 leading-tight">يرجى ملئ معلوماتك للطلب / Vos coordonnées</h2>
+              <h2 className="text-2xl md:text-3xl font-black text-slate-900 leading-tight">إملأ الاستمارة للطلب / Remplissez le formulaire</h2>
               <p className="text-slate-500 text-[10px] mt-2">التوصيل متوفر لجميع الولايات - الدفع عند الاستلام / Livraison 58 Wilayas</p>
             </div>
 
@@ -650,7 +662,7 @@ export default function App() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-500 font-bold tracking-tighter">التوصيل / Livraison:</span>
-                  <span className="text-emerald-600 font-bold text-[10px] md:text-xs">حسب الولاية / Selon Wilaya</span>
+                  <span className="text-emerald-600 font-bold text-[10px] md:text-xs" translate="no">حسب الولاية / Livraison selon Wilaya</span>
                 </div>
                 <div className="h-px bg-[#EC4899]/20" />
                 <div className="flex justify-between items-center">
