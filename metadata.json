@@ -1,0 +1,6 @@
+{
+  "name": "ROZAKITCHENDZ - Ninja HyperHeat",
+  "description": "High-converting landing page for the Ninja HyperHeat 9-in-1 Multicooker in Algeria.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
